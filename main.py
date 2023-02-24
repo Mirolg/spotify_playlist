@@ -22,8 +22,8 @@ sp = spotipy.Spotify(
         client_id=getenv('CLIENT_ID'),
         client_secret=getenv('CLIENT_SECRET'),
         redirect_uri="http://localhost:8888/callback",
-        # cache_path='token.txt',
-        show_dialog=True
+        show_dialog=True,
+        cache_path="token.txt"
     )
 )
 user = sp.current_user()['id']
@@ -34,3 +34,8 @@ for song in songs:
     uri = results["tracks"]["items"][0]["uri"]
     uri_song.append(uri)
 
+create_playlist = sp.user_playlist_create(user=user, name="70's Hits", public=False)
+
+sp.playlist_add_items(playlist_id=create_playlist['id'], items=uri_song)
+
+print('complete')
