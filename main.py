@@ -1,5 +1,10 @@
+from dotenv import load_dotenv
+from os import getenv
 import requests
 from bs4 import BeautifulSoup
+import spotipy
+from spotipy.oauth2 import SpotifyOAuth
+load_dotenv()
 
 url = 'https://www.stohitow.pl/przeboje-lat-70'
 song_list = []
@@ -11,4 +16,14 @@ for song in songs:
     song_list.append(song.text)
 
 
-print(song_list)
+sp = spotipy.Spotify(
+    auth_manager=SpotifyOAuth(
+        scope='playlist-modify-private',
+        client_id=getenv('CLIENT_ID'),
+        client_secret=getenv('CLIENT_SECRET'),
+        redirect_uri="http://localhost:8888/callback",
+        cache_path='token.txt',
+        show_dialog=True
+    )
+)
+
